@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 
 public class MainActivity extends AppCompatActivity implements MainFragment.TaskCallbacks {
     public static final String TAG = "LeakIt";
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Task
     IndependentAsynctask independentAsynctask;
     MainFragment mFragment;
     private static final String TAG_FRAGMENT = "tag_fragment";
-
+    ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Task
             fm.beginTransaction().add(mFragment,TAG_FRAGMENT).commit();
         }
 
+        mProgressBar = (ProgressBar) findViewById(R.id.progress);
+        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressBar.setProgress(0);
     }
 
     @Override
@@ -99,16 +103,20 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Task
     @Override
     public void onPostExecute() {
         Log.d(TAG,"onPostExecute()");
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void onCancelled() {
         Log.d(TAG,"onCancelled()");
+        mProgressBar.setVisibility(View.GONE);
+
     }
 
     @Override
     public void updateProgress(int percent) {
         Log.d(TAG,"updateProgress() : " + percent);
+        mProgressBar.setProgress(percent);
 
     }
 
