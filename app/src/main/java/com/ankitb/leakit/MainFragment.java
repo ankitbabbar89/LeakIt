@@ -6,6 +6,10 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Created by Ankit on 27/10/15.
@@ -40,7 +44,15 @@ public class MainFragment extends Fragment {
         setRetainInstance(true);
 
         mTask = new MyFragmentTask();
-        mTask.execute();
+        Log.d(MainActivity.TAG, "executing task 1");
+        mTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,1);
+
+        Log.d(MainActivity.TAG, "executing task 2");
+        new MyFragmentTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 2);
+
+        Log.d(MainActivity.TAG, "executing task 3");
+        new MyFragmentTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 3);
+
     }
 
     @Override
@@ -49,10 +61,11 @@ public class MainFragment extends Fragment {
         mCallbacks = null;
     }
 
-    class MyFragmentTask extends AsyncTask<Void,Integer,Void>{
+    class MyFragmentTask extends AsyncTask<Integer,Integer,Void>{
         @Override
-        protected Void doInBackground(Void... params) {
+        protected Void doInBackground(Integer... params) {
             for(int i=0; !isCancelled() && i<100; ++i){
+                Log.d(MainActivity.TAG,"doInBackground: "+params[0]);
                 SystemClock.sleep(100);
                 publishProgress(i);
             }
@@ -79,8 +92,8 @@ public class MainFragment extends Fragment {
 
         @Override
         protected void onProgressUpdate(Integer... values) {
-            if(mCallbacks != null)
-                mCallbacks.updateProgress(values[0]);
+//            if(mCallbacks != null)
+//                mCallbacks.updateProgress(values[0]);
         }
     }
 }
