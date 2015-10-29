@@ -45,13 +45,15 @@ public class MainFragment extends Fragment {
 
         mTask = new MyFragmentTask();
         Log.d(MainActivity.TAG, "executing task 1");
-        mTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,1);
+        mTask.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR,1);
 
         Log.d(MainActivity.TAG, "executing task 2");
-        new MyFragmentTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 2);
+        new MyFragmentTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, 2);
 
         Log.d(MainActivity.TAG, "executing task 3");
         new MyFragmentTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 3);
+
+
 
     }
 
